@@ -1,0 +1,35 @@
+Projet Enhancement Picture Explication
+source: https://www.programmersought.com/article/61683872029/  
+(CELL 1) Partie Equalization :
+Etape 1: 
+Configuration explicite des parametre de l’image (Taille ) 
+Initialisation de 3 listes d’array au nom des 3 canaux d’une image RGB  (len 256, type float) np.zeros(5) array([ 0., 0., 0., 0., 0.]) 
+ 
+Etape 2: 
+Comptage du nombre d’apparition de pixel dans chaque canal.
+Sur une array de len 256, le numero de position est assimilé à la valeur du pixel compté et la valeur de l’array à cette position vaut le nombre de fois que cette valeur apparaît dans l’image. 
+En parcourant l’image de départ, on associe au triplet (r,g,b) la position du point dans l’image en [i,j]. Donc à chaque point de l’image est associé un triplet (r,g,b).
+Ensuite, on calcule la probabilité totale de voir chaque canal sur l’entièreté des pixels de l’image (variable count_b) i.e. la proportion de chaque canal ramené sur le total des pixels de l’image. 
+ 
+Etape 3:  
+Comptage cumulatif des probabilités. En bref, on somme tous les termes un à un de la liste array de chaque canal (Somme cumulative des éléments) et on la stock dans la variable sum_ 
+Et les valeurs de la liste array count_b sont remplacées par les sommes cumulées au moment de l’itération i. 
+ 
+Etape 4 
+Début de la mise en place de la nouvelle Map i.e valeur des pixels de la newImage. 
+A partir de count_ qui pour rappel est la liste de len256 et reprend la somme cumulée à chaque i, on la convertit en uint16 (= plage d’integer [0: 65535]) et on la multiplie par 255 pour former une base pondérée par les proportion initial de chaque canal.  
+
+Etape 5  
+Initialisation d’une liste array de même taille que l’image initiale et exprimée en canaux et de type uint8(= [0: 255] valeurs) 
+En parcourant cette nouvelle map, on attribue un triplet (r,g,b) à chaque point de position de la map. La valeur de chaque canal à cette position est définie par map1_b de cette même position.  
+Aussi dans chaque itération, la nouvelle map est remplie par les valeurs itératives du triplet canaux. 
+A la fin du parcours de le la nouvelle Map, la map sera remplie des nouvelles valeurs de pixel et ainsi la nouvelle image est créée.  
+  
+(CELL 1) Partie Module des Parametres :
+En faisant appel au module ImageEnhancement de la Librairie PIL, il est possible de jouer sur les sous-modules Color/Brightness/Sharpness et contraste. Bien sûr Color modifie aussi la valeur de pixels mais de facon modulable contrairement à la manip equalization. 
+Sources:  
+https://www.programmersought.com/article/61683872029/ 
+
+CELL2:Essai Contraste
+CELL3: Essai GAMMA CORRECTION
+CELL4: Essai FILTRE: source: http://datahacker.rs/opencv-common-types-of-noise/
