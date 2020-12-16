@@ -1,0 +1,28 @@
+
+TP3 : Brain Segmentation
+
+Etape1 : Resize l’image à 240x240 (Normalise taille de toutes les images) en cours et l’ajoute dans une liste.
+Etape 2 : Print propriétés image et resize encore une fois (500x590)
+Etape 3 : Convertit l’image à 3 canaux en image Gray (1 canal)
+Source : https://opencv-python-tutroals.readthedocs.io/en/latest/py_tutorials/py_imgproc/py_morphological_ops/py_morphological_ops.html 
+
+Etape4 : applique un filtre seuil binaire sur la grayImage. Cv2.Treshold( src, treshold, maxValue, type[dst])
+Etape 5 : Inverse les valeurs du filtre Treshold (INV_BINARY)
+
+Etape 6 : Transformation morphologique (operation simple basé sur forme des images) 2 entrées ( src, element structurel = kernel) détermine la nature de l’opération. En utilisant la fonction cv2.getStrucutingElement () il suffit d’entrée les dimensions du kernel (cv2.MORPH_RECT (10,5).
+
+Etape 7 : En principe le fond de la forme est blanc (white foreground)
+Closed operation i.e. dilatation suivie d’une érosion. Utiliser pour éliminer les éventuels point noir sur l’objet ou refermer les petits trous dans le font de l’objet. Cv2.morphologyEx (im, cv2.MORPH_CLOSE, kernel)
+Dilataion : augmente la région blanche de la forme et augmente aussi le fond de l’image. 
+Erosion : « Erode » les bords de l’image concernée. Le kernel balaie l’image et le pixel qu’elle évalue sera considéré comme valant si et seulement tous les pixels à l’intérieur du kernel sont de valeurs 1 également. Donc les bords de la forme vont s’amincir en fonction des dimensions du kernel. Permet de cette façon d’enlever le bruit blanc.
+
+Etape 8 : Sur l’image closed, on applique à nouveau un filtre seuil binaire. Et pour extraire une forme non rectangulaire de l’image closed, la fonction cv2.bitwise_and est appelée.
+Etape 9 : La fonction auto_canny calcule la médiane des pixels du canal pour mieux appliqué le filtre Canny (détection de bord automatique). Il en ressort le contour de notre forme que l’on applique à notre image initiale pour un rendu du contour de la forme. 
+Etape 10 : Calcul de l’air de la forme grâce à la fonction cv2.Area qui retourne le nombre de pixels au sein de la forme.  
+
+** Commentaire sur fonction FindContours et ses arguments
+Source : https://docs.opencv.org/master/d4/d73/tutorial_py_contours_begin.html
+Sachant que les contours sont les bords d’une forme d’une même intensité, il faut stocker les coordonnées (x, y) de l’entièreté du bord. Or il n’est pas nécessaire de tout stocker (méthode d’approximation des contours). CHAIN_APPROX_SIMPLE est une methode d’approximation qui enlève tous les points redondants et compress le contour afin de sauver de la memoire.
+Source : https://docs.opencv.org/3.4/d9/d8b/tutorial_py_contours_hierarchy.html 
+Mode de récupération des contours : Hiérarchie des contours : outer = parents et inner = enfants. 
+Mode de récup externe est utilisé car seule les extrêmes outers sont retournés, les enfants ne sont pas pris en compte.
